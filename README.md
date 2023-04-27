@@ -1,4 +1,4 @@
-#### Distraction Ward
+### Distraction Ward
 
 This is a prototype for a **Chrome** extension meant to restrict access to certain websited the user deems **distracting**.
 
