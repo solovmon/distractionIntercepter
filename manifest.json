@@ -11,5 +11,11 @@
             "matches": ["<all_urls>"],
             "js": ["scripts/content.js"]  
         }
-    ]
+    ],
+    "icons": {
+        "16": "images/Wag_16_png.png",
+        "32": "images/Wag_32_png.png",
+        "48": "images/Wag_48_png.png",
+        "128": "images/Wag_128_png.png"
+    }
 }
