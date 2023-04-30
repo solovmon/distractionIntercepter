@@ -1,6 +1,6 @@
 ### Distraction Ward
 
-This is a prototype for a **Chrome** extension meant to restrict access to certain websites the user deems **distracting**.
+This is a prototype for a **Chrome** extension meant to restrict access to certain websitesg the user deems **distracting**.
 
 --- 
 
