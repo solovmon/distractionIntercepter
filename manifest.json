@@ -3,7 +3,10 @@
     "name": "Distraction Ward",
     "version": "1.0.0",
     "description": "Grants user the capability of restricting access to certain domains.",
-    "permissions": [],
+    "permissions": [
+        "storage",
+        "tabs"
+    ],
     "action": {
         "default_popup": "popUp/popUp.html",
         "default_title": "Distraction Ward"
@@ -11,12 +14,6 @@
     "background": {
         "service_worker": "scripts/background.js"
     },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["scripts/content.js"]  
-        }
-    ],
     "icons": {
         "16": "images/Wag_16_png.png",
         "32": "images/Wag_32_png.png",

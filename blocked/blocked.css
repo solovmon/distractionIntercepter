@@ -1,0 +1,31 @@
+body {
+    background-image: url('../images/spacebackground.jpeg');
+}
+
+#container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+#text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: white;
+    text-shadow: 4px 3px 0px #cecece, 9px 8px 0px rgba(0,0,0,0.15);
+    font-size: 5vw;
+    white-space: nowrap;
+    font-family: 'Trebuchet MS', sans-serif;
+}
