@@ -1,11 +1,14 @@
 let blockedList = [];
 
-chrome.storage.local.get(['blocked_domains'])
-    .then((result) => {
-        blockedList = result.blocked_domains;
-    })
 
-let extractDomain = (url) => {
+function getCallback(result) {
+    blockedList = result.blocked_domains;
+}
+
+chrome.storage.local.get(['blocked_domains'])
+    .then(getCallback)
+
+function extractDomain(url) {
     try {
         let domain = new URL(url);
         domain = domain.hostname;
@@ -16,11 +19,7 @@ let extractDomain = (url) => {
     }
 }
 
-let getCallback = (result) => {
-    blockedList = result.key;
-}
-
-let redirectCallback = (tabId, changeInfo, tab) => {
+function redirectCallback(tabId, changeInfo, tab) {
     currentDomain = extractDomain(changeInfo.url);
     console.log(currentDomain);
     if (blockedList.includes(currentDomain)){
@@ -28,16 +27,9 @@ let redirectCallback = (tabId, changeInfo, tab) => {
     }
 }
 
-let storageChangeCallback = (changes, area) => {
+function storageChangeCallback(changes, area) {
   blockedList = changes.blocked_domains.newValue;
 }
 
-
 chrome.storage.onChanged.addListener(storageChangeCallback);
-
-chrome.storage.local.get(['blocked_domains'])
-    .then((result) => {
-        blockedList = result.blocked_domains;
-    })
-    
 chrome.tabs.onUpdated.addListener(redirectCallback);

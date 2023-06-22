@@ -1,6 +1,3 @@
-// green book: &#128215;
-// red book: &#128213;  
-
 async function getBlockedDomains() {
     let result = await chrome.storage.local.get(["blocked_domains"])
     let blockedList = result.blocked_domains;
