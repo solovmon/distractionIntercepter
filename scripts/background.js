@@ -5,7 +5,7 @@ function getCallback(result) {
     blockedList = result.blocked_domains;
 }
 
-chrome.storage.local.get(['blocked_domains'])
+chrome.storage.local.get(["blocked_domains"])
     .then(getCallback)
 
 function extractDomain(url) {

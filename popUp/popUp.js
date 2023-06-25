@@ -1,7 +1,6 @@
 async function getBlockedDomains() {
     let result = await chrome.storage.local.get(["blocked_domains"])
     let blockedList = result.blocked_domains;
-    console.log(blockedList);
     return blockedList;
 }
 
