@@ -24,12 +24,16 @@ async function getCurrentDomain() {
     return domain;
 }
 
-async function displayCurrentDomain() {
+async function displayContent(){
+    const blockedDomains = await getBlockedDomains();
     const currentDomain = await getCurrentDomain();
-    console.log(currentDomain);
-    document.getElementById("currentDomain").innerHTML = `${currentDomain || "error"}`;
+    displayCurrentDomain(currentDomain, blockedDomains);
+    displayBlockedDomains(blockedDomains);
+}
 
-    const blockedList = await getBlockedDomains();
+async function displayCurrentDomain(currentDomain, blockedList) {
+    document.getElementById("currentDomain").innerHTML = `${currentDomain || "error" }`;
+
     const statusEmoji = document.getElementById("statusEmoji");
 
     if (blockedList.includes(currentDomain)) {
@@ -40,13 +44,39 @@ async function displayCurrentDomain() {
     }
 }
 
+async function displayBlockedDomains( blockedList ) {
+    const listElement = document.getElementById("blockedList");
+    listElement.innerHTML = "";
+    blockedList.forEach((item, index) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        const removeButton = document.createElement("button");
+        removeButton.addEventListener('click', () => {
+            blockedList.splice(index, 1);
+            updateBlockedList(blockedList);
+            displayContent();
+        });
+        listItem.appendChild(removeButton);
+        listElement.appendChild(listItem);
+    })
+}
+
 async function blockCurrentDomain() {
     const currentDomain = await getCurrentDomain();
     let blockedList = await getBlockedDomains();
-    blockedList.push(currentDomain);
-    await chrome.storage.local.set({blocked_domains: blockedList});
-    displayCurrentDomain();
+    if (blockedList.includes(currentDomain)) {
+        return;
+    }
+    else {
+        blockedList.push(currentDomain);
+        await chrome.storage.local.set({blocked_domains: blockedList});
+        displayContent();
+    }
 }
 
-document.addEventListener("DOMContentLoaded", displayCurrentDomain);
+async function updateBlockedList(blockedList) {
+    await chrome.storage.local.set({blocked_domains: blockedList});
+}
+
+document.addEventListener("DOMContentLoaded", displayContent);
 document.getElementById("block").addEventListener("click", blockCurrentDomain);
