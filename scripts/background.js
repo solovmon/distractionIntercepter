@@ -1,12 +1,10 @@
-let blockedList = [];
+let BLOCKED_LIST = [];
 let INTERVALL_ID = undefined;
 
-function getCallback(result) {
-    blockedList = result.blocked_domains;
+async function getBlockedDomains() {
+    result = await chrome.storage.local.get(["blocked_domains"])
+    BLOCKED_LIST = result.blocked_domains;
 }
-
-chrome.storage.local.get(["blocked_domains"])
-    .then(getCallback)
 
 function extractDomain(url) {
     try {
@@ -20,19 +18,19 @@ function extractDomain(url) {
 }
 
 async function redirectCallback(tabId, changeInfo, tab) {
+    console.log("trying to block");
     const result = await chrome.storage.local.get(["running"]);
-
     if (result.running) {
         currentDomain = extractDomain(changeInfo.url);
-        console.log(currentDomain);
-        if (blockedList.includes(currentDomain)) {
+        if (BLOCKED_LIST.includes(currentDomain)) {
+            console.log("blocking:" + currentDomain);
             chrome.tabs.update(tabId, {url: "blocked/blocked.html"});
         }
     }
 }
 
 function storageChangeCallback(changes, area) {
-  blockedList = changes.blockedList ? changes.blocked_domains.newValue : blockedList;
+    BLOCKED_LIST = changes.blocked_domains ? changes.blocked_domains.newValue : BLOCKED_LIST;
 }
 
 async function updateMilliseconds() {
@@ -42,6 +40,7 @@ async function updateMilliseconds() {
         if (milliseconds <= 0) {
             milliseconds = 0;
             clearInterval(INTERVALL_ID);
+            INTERVALL_ID = undefined;
             await chrome.storage.local.set({running: false});
         }
         await chrome.storage.local.set({milliseconds: milliseconds});
@@ -49,14 +48,25 @@ async function updateMilliseconds() {
 }
 
 async function messageCallback(message){
-    if (message === "start-timer") {
+    if (message === "start-timer" && INTERVALL_ID === undefined) {
         INTERVALL_ID = setInterval(updateMilliseconds, 1000)
     }
     else if (message === "stop-timer"){
         clearInterval(INTERVALL_ID);
+        INTERVALL_ID = undefined;
     } else return
 }
 
+async function restartTimerIfRunning(){
+    const result = await chrome.storage.local.get(["running"]);
+    if (result.running){
+        messageCallback("start-timer");
+    }
+}
+
+getBlockedDomains();
+console.log(BLOCKED_LIST);
+restartTimerIfRunning();
 chrome.storage.onChanged.addListener(storageChangeCallback);
 chrome.tabs.onUpdated.addListener(redirectCallback);
 chrome.runtime.onMessage.addListener(messageCallback);

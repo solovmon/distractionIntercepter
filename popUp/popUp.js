@@ -144,7 +144,7 @@ function storageChangeCallback(changes, area) {
         displayTimer();
         displayTimerButton();
     }
-  }
+}
 
 displayTimer();
 displayTimerButton();
