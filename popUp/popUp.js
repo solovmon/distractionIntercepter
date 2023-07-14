@@ -85,27 +85,70 @@ function convertDisplayTimeToMs(displayTime){
 }
 
 function convertMsToDisplayTime(milliseconds) {
-    const minutes = Math.floor(milliseconds/60000);
-    const seconds = (milliseconds%60000)/1000;
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = (milliseconds%60000) / 1000;
     const displayTime = `${(minutes/10 >= 1 ? minutes : "0" + minutes)}:${(seconds/10 >= 1 ? seconds : "0" + seconds)}`
     return displayTime;
 }
 
 async function toggleTimer() {
     const button = document.getElementById("toggleTimer");
-    if ( button.innerHTML === "on"){
+    const result = await chrome.storage.local.get(["running"]);
+    const input = document.getElementById("input");
+
+    if ( !result.running && button.innerHTML === "on") {
         button.innerHTML = "off";
         button.classList.replace("green", "red")
-        await chrome.storage.local.set({running: true});
+        const milliseconds = convertDisplayTimeToMs(input.value);
+        await chrome.storage.local.set( {running: true, milliseconds: milliseconds} );
+        input.disabled = true;
+        chrome.runtime.sendMessage("start-timer");
     }
-
     else {
         button.innerHTML = "on";
         button.classList.replace("red", "green")
-        await chrome.storage.local.set({running: false});
+        await chrome.storage.local.set( {running: false} );
+        input.disabled = false;
+        chrome.runtime.sendMessage("stop-timer");
     }
 }
 
+async function displayTimerButton() {
+    const result = await chrome.storage.local.get(["running"]);
+    const button = document.getElementById("toggleTimer");
+    if (result.running) {
+        button.innerHTML = "off";
+        button.classList.add("red")
+    }
+    else {
+        button.innerHTML = "on";
+        button.classList.add("green")
+    }
+}
+
+async function displayTimer() {
+    const result = await chrome.storage.local.get(["milliseconds", "running"]);
+    const displayTime = result.milliseconds ? convertMsToDisplayTime(result.milliseconds) : "00:00";
+    const input = document.getElementById("input");
+    input.value = displayTime;
+    if(result.running){
+        input.disabled = true;
+    } 
+    else {
+        input.disabled = false;
+    }
+}
+
+function storageChangeCallback(changes, area) {
+    if (changes.milliseconds) {
+        displayTimer();
+        displayTimerButton();
+    }
+  }
+
+displayTimer();
+displayTimerButton();
 document.addEventListener("DOMContentLoaded", displayContent);
 document.getElementById("block").addEventListener("click", blockCurrentDomain);
 document.getElementById("toggleTimer").addEventListener("click", toggleTimer);
+chrome.storage.onChanged.addListener(storageChangeCallback);
