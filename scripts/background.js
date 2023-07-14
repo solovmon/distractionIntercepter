@@ -19,7 +19,11 @@ function extractDomain(url) {
     }
 }
 
-function redirectCallback(tabId, changeInfo, tab) {
+async function redirectCallback(tabId, changeInfo, tab) {
+    const running = await chrome.storage.local.get(["running"])
+    if (!running){
+        return;
+    }
     currentDomain = extractDomain(changeInfo.url);
     console.log(currentDomain);
     if (blockedList.includes(currentDomain)){
@@ -28,8 +32,5 @@ function redirectCallback(tabId, changeInfo, tab) {
 }
 
 function storageChangeCallback(changes, area) {
-  blockedList = changes.blocked_domains.newValue;
+  blockedList = changes.blocked_domains ? changes.blocked_domains.newValue : blockedList;
 }
-
-chrome.storage.onChanged.addListener(storageChangeCallback);
-chrome.tabs.onUpdated.addListener(redirectCallback);
