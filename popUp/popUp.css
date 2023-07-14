@@ -7,7 +7,6 @@
     min-width: 300px;
     min-height: 30px;
     margin: 5px 5px;
-    padding-left: 10px;
     display: grid;
     align-items: center;
     justify-content: space-evenly;
@@ -33,7 +32,7 @@ li {
     margin: 5px;
     font-size: 10px;
     text-align: left;
-    padding-left: 20px;
+    padding-left: 10px;
     background-color: rgba(203, 203, 203, 0.502);
     justify-content: center;
     grid-template: 1fr / 12fr 1fr;
@@ -51,8 +50,9 @@ ul {
 
 .domainContainer {
     background-color: rgb(244, 244, 244);
-    grid-template: 1fr / 2fr 5fr 1fr 1fr;
+    grid-template: 1fr / 2fr 5.3fr 0.7fr 1fr;
     border-radius: 15px;
+    padding-left: 10px;
 }
 
 body {
@@ -68,7 +68,6 @@ body {
     font-weight: 700;
     font-stretch: extra-expanded;
     font-size: 14px;
-    padding-left: 5px;
 }
 
 #currentDomain {
@@ -77,9 +76,21 @@ body {
     overflow: hidden;
 }
 
-#statusEmoji {
-    text-align: center;
-    text-justify: center;
+#status {
+    height: 30px;
+    width: 12px;
+    border-radius: 4px;
+    align-self: right;
+}
+
+.red {
+    background-color: rgba(255, 0, 0, 0.807);
+    box-shadow: inset 1.5px 1.5px rgba(170, 47, 47, 0.6);
+}
+
+.green {
+    background-color: rgba(83, 195, 75, 0.807);
+    box-shadow: inset 1.5px 1.5px rgba(35, 151, 41, 0.6);
 }
 
 #block {

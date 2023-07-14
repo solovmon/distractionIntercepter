@@ -34,13 +34,13 @@ async function displayContent(){
 async function displayCurrentDomain(currentDomain, blockedList) {
     document.getElementById("currentDomain").innerHTML = `${currentDomain || "error" }`;
 
-    const statusEmoji = document.getElementById("statusEmoji");
+    const status = document.getElementById("status");
 
     if (blockedList.includes(currentDomain)) {
-        statusEmoji.innerHTML = "&#128308;"
+        status.classList.replace("green", "red");
     }
     else {
-        statusEmoji.innerHTML = "&#128994;";
+        status.classList.replace("red", "green");
     }
 }
 
