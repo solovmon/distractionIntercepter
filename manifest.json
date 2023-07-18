@@ -5,7 +5,8 @@
     "description": "Grants user the capability of restricting access to certain domains.",
     "permissions": [
         "storage",
-        "tabs"
+        "tabs",
+        "favicon"
     ],
     "action": {
         "default_popup": "popUp/popUp.html",

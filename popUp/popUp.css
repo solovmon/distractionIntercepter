@@ -67,14 +67,17 @@ li {
     padding: 0;
     margin: 5px;
     font-size: 10px;
-    text-align: left;
     padding-left: 10px;
     background-color: rgba(203, 203, 203, 0.502);
     justify-content: center;
-    grid-template: 1fr / 12fr 1fr;
+    grid-template: 1fr / 1fr 10fr 1fr;
     border-radius: 5px;
     color: black;
     font-weight: 400;
+}
+
+li > img {
+    filter: grayscale(20%);
 }
 
 ul {

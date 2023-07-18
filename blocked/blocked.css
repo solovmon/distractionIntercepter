@@ -22,7 +22,7 @@ html, body {
 }
 
 .spaceman {
-    animation: shake 50s alternate infinite;
+    animation: shake 35s alternate infinite;
     grid-area: 1 / 2 / 5 / 3;
     z-index: 2;
 }
@@ -53,6 +53,7 @@ html, body {
 }
 
 @keyframes scale {
+    from { transform: scale(1.0);}
     to { transform: scale(1.1);}
     
 }

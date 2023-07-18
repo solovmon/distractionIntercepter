@@ -48,14 +48,19 @@ async function displayBlockedDomains( blockedList ) {
     const listElement = document.getElementById("blockedList");
     listElement.innerHTML = "";
     blockedList.forEach((item, index) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = item;
+        const listItem = document.createElement("li")
+        const itemText = document.createElement("p");
+        itemText.textContent = item;
         const removeButton = document.createElement("button");
         removeButton.addEventListener('click', () => {
             blockedList.splice(index, 1);
             updateBlockedList(blockedList);
             displayContent();
         });
+        const faviconImg = document.createElement("img");
+        faviconImg.src = faviconURL("https://" + item);
+        listItem.appendChild(faviconImg);
+        listItem.appendChild(itemText);
         listItem.appendChild(removeButton);
         listElement.appendChild(listItem);
     })
@@ -144,6 +149,13 @@ function storageChangeCallback(changes, area) {
         displayTimer();
         displayTimerButton();
     }
+}
+
+function faviconURL(pageUrl) {
+    const url = new URL(chrome.runtime.getURL('/_favicon/'));
+    url.searchParams.set("pageUrl", pageUrl); 
+    url.searchParams.set("size", "16");
+    return url.toString();
 }
 
 displayTimer();
